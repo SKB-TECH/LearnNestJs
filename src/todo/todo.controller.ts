@@ -17,24 +17,26 @@ import {
 } from '@nestjs/common';
 import { Todo } from './entite/to.entity';
 import { ObjectUnsubscribedError, identity } from 'rxjs';
+import { AddTodos } from './dto/add-todo.dto';
+import { GetPagination } from './dto/get-Pagination';
 
 @Controller('todo')
 export class TodoController {
   constructor() {
-    this.todo = [];
+    this.todos = [];
   }
-  todo: Todo[];
+  todos: Todo[];
   //   all tasks
   @Get()
   @HttpCode(202)
-  getTodo(@Query() mesParams) {
+  getTodo(@Query() mesParams: GetPagination) {
     console.log(mesParams);
-    return this.todo;
+    return this.todos;
   }
   //  one task
   @Get(':id')
   getOne(@Param('id') id) {
-    const todos = this.todo.find((actuelTodo: Todo) => actuelTodo.id == +id);
+    const todos = this.todos.find((actuelTodo: Todo) => actuelTodo.id == +id);
     if (todos) {
       return todos;
     } else {
@@ -44,22 +46,26 @@ export class TodoController {
 
   @Post()
   @HttpCode(201)
-  addTodo(@Body() newTodo: Todo) {
-    if (this.todo.length) {
-      newTodo.id = this.todo[this.todo.length - 1].id + 1;
+  addTodo(@Body() newTodo: AddTodos) {
+    const todo = new Todo();
+    const { name, description } = newTodo;
+    todo.name = name;
+    todo.description = description;
+    if (this.todos.length) {
+      todo.id = this.todos[this.todos.length - 1].id + 1;
     } else {
-      newTodo.id = 1;
+      todo.id = 1;
     }
 
-    this.todo.push(newTodo);
-    return newTodo;
+    this.todos.push(todo);
+    return todo;
   }
   //   suppression d'une task
   @Delete(':id')
   deleteTodo(@Param('id') id) {
-    const index = this.todo.findIndex((todo: Todo) => todo.id === +id);
+    const index = this.todos.findIndex((todo: Todo) => todo.id === +id);
     if (index >= 0) {
-      this.todo.splice(index, 1);
+      this.todos.splice(index, 1);
     } else {
       throw new NotFoundException(`Votre id: ${id} est introuvable`);
     }
