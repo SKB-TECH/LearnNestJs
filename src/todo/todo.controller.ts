@@ -16,7 +16,6 @@ import {
   Res,
 } from '@nestjs/common';
 import { Todo } from './entite/to.entity';
-import { ObjectUnsubscribedError, identity } from 'rxjs';
 import { AddTodos } from './dto/add-todo.dto';
 import { GetPagination } from './dto/get-Pagination';
 
