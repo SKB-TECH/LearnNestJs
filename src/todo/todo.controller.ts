@@ -18,19 +18,18 @@ import {
 import { Todo } from './entite/to.entity';
 import { AddTodos } from './dto/add-todo.dto';
 import { GetPagination } from './dto/get-Pagination';
+import { TodoService } from './todo.service';
 
 @Controller('todo')
 export class TodoController {
-  constructor() {
-    this.todos = [];
-  }
+  constructor(private todoService: TodoService) {}
   todos: Todo[];
   //   all tasks
   @Get()
   @HttpCode(202)
   getTodo(@Query() mesParams: GetPagination) {
     console.log(mesParams);
-    return this.todos;
+    return this.todoService.getTodo;
   }
   //  one task
   @Get(':id')
