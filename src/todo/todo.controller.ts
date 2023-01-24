@@ -30,8 +30,8 @@ export class TodoController {
   @Get()
   @HttpCode(202)
   getTodo(@Query() mesParams: GetPagination) {
-    console.log(mesParams);
-    return this.todoService.getTodo;
+    console.log(mesParams instanceof GetPagination);
+    return this.todoService.getTodo();
   }
   //  one task
   @Get(':id')
