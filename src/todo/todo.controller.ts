@@ -2,7 +2,9 @@ import {
   Body,
   HttpStatus,
   NotFoundException,
+  Options,
   Param,
+  ParseIntPipe,
   Query,
 } from '@nestjs/common';
 import {
@@ -33,23 +35,29 @@ export class TodoController {
   }
   //  one task
   @Get(':id')
-  getOne(@Param('id') id): Todo {
-    return this.todoService.getTodoById(+id);
+  getOne(@Param('id', ParseIntPipe) id): Todo {
+    return this.todoService.getTodoById(id);
   }
-
   // add a new to do
   @Post()
   @HttpCode(201)
   addTodo(@Body() newTodo: AddTodosDto): Todo {
     return this.todoService.addTodo(newTodo);
   }
-
   // delete one todo
   @Delete(':id')
-  deleteTodo(@Param('id') id) {
-    return this.todoService.deleteOneTodo(+id);
+  deleteTodo(
+    @Param(
+      'id',
+      new ParseIntPipe({
+        errorHttpStatusCode: HttpStatus.BAD_REQUEST,
+      }),
+    )
+    id,
+  ) {
+    console.log(typeof id);
+    return this.todoService.deleteOneTodo(id);
   }
-
   @Put(':id')
   updateTodo(@Param('id') id, @Body() data: Partial<Todo>) {
     return this.updateTodo(id, data);
