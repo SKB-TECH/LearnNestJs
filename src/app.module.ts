@@ -17,9 +17,28 @@ import {
   HelmetHpkpMiddleware,
   HelmetMiddleware,
 } from '@nest-middlewares/helmet';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import * as dotenv from 'dotenv';
 
+dotenv.config();
 @Module({
-  imports: [SecondModule],
+  imports: [
+    SecondModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      entities: ['dist/**/*.entity{.ts,.tsx}'],
+      synchronize: true,
+    }),
+  ],
   controllers: [AppController, TodoController],
   providers: [AppService, TodoService],
 })
