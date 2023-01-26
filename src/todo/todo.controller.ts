@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   Controller,
@@ -21,6 +22,7 @@ import { Todo } from './entite/to.entity';
 import { AddTodosDto } from './dto/add-todo.dto';
 import { GetPagination } from './dto/get-Pagination';
 import { TodoService } from './todo.service';
+import { DurationInterceptor } from 'src/intercepteur/duration/duration.interceptor';
 
 @Controller('todo')
 export class TodoController {
@@ -39,6 +41,7 @@ export class TodoController {
     return this.todoService.getTodoById(id);
   }
   // add a new to do
+  //@UseInterceptors(DurationInterceptor)
   @Post()
   @HttpCode(201)
   addTodo(@Body() newTodo: AddTodosDto): Todo {
