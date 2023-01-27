@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { CvService } from './cv.service';
 import { CvEntity } from './entities/cv.entity/cv.entity';
 import { AddCvDto } from './dto/addCvDto';
@@ -29,11 +37,16 @@ export class CvController {
   ): Promise<CvEntity> {
     return await this.cvServices.updateCv(id, update);
   }
-
   // update2
   @Patch()
   async updateCv2(@Body() UpdateObject) {
     const { critere, updatecv } = UpdateObject;
     return await this.cvServices.updateCV2(critere, updatecv);
+  }
+
+  // delete one cv
+  @Delete(':id')
+  async(@Param('id') id: string) {
+    return this.cvServices.removeCv(id);
   }
 }
