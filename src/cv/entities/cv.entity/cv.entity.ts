@@ -2,8 +2,8 @@ import { TimeStamps } from '../../../Times/timestamp.entity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('cv')
 export class CvEntity extends TimeStamps {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({
     length: 50,
