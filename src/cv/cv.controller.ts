@@ -45,8 +45,19 @@ export class CvController {
   }
 
   // delete one cv
+  // @Delete(':id')
+  // async(@Param('id') id: string) {
+  //   return this.cvServices.removeCv(id);
+  // }
+
   @Delete(':id')
   async(@Param('id') id: string) {
-    return this.cvServices.removeCv(id);
+    return this.cvServices.softremoveCv(id);
+  }
+
+  // recover cv
+  @Get('recover/:id')
+  async recover(@Param('id') id: string) {
+    return await this.cvServices.recoverCV(id);
   }
 }
