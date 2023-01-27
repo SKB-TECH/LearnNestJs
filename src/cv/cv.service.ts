@@ -78,4 +78,11 @@ export class CvService {
     //const cvTorecover = await this.findCvById(id);
     this.cvRepository.restore(id);
   }
+
+  /** une requette build permete de creer des requettes personnaliser qui ne figurent pas dans typeORM */
+  async StatisticCvAge() {
+    const qb = this.cvRepository.createQueryBuilder('cv');
+    qb.select('cv.age, count(cv.id) as stateCV').groupBy('cv.age');
+    return await qb.getRawMany();
+  }
 }
