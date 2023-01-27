@@ -4,6 +4,7 @@ import { CvEntity } from './entities/cv.entity/cv.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AddCvDto } from './dto/addCvDto';
 import { UpdateCvDto } from './dto/updateCvDto';
+import { find } from 'rxjs';
 
 @Injectable()
 export class CvService {
@@ -11,6 +12,19 @@ export class CvService {
     @InjectRepository(CvEntity)
     private cvRepository: Repository<CvEntity>,
   ) {}
+
+  // findById
+  async findCvById(id: string) {
+    const cv = await this.cvRepository.findOneBy({
+      id: id,
+    });
+    if (!cv) {
+      throw new NotFoundException(
+        `Le cv correspondant a cet id: ${id} n'existe pas `,
+      );
+    }
+    return cv;
+  }
 
   //read all cvs
   async getCvs(): Promise<CvEntity[]> {
@@ -45,19 +59,23 @@ export class CvService {
 
   // suppresssion I du cv
   async removeCv(id: string) {
-    const cvRemove = await this.cvRepository.findOneBy({
-      id: id,
-    });
-    if (!cvRemove) {
-      throw new NotFoundException(
-        `Le cv correspondant a cet id: ${id} n'existe pas `,
-      );
-    }
+    const cvRemove = await this.findCvById(id);
     return await this.cvRepository.remove(cvRemove);
   }
-
   // suppresssion II du cv
   async deleteCv(id: string) {
     return await this.cvRepository.delete(id);
+  }
+
+  // deletesoft
+  async softremoveCv(id: string) {
+    const cvRemove = await this.findCvById(id);
+    return await this.cvRepository.softDelete(cvRemove);
+  }
+
+  // recovery cv
+  async recoverCV(id: string) {
+    //const cvTorecover = await this.findCvById(id);
+    this.cvRepository.restore(id);
   }
 }
