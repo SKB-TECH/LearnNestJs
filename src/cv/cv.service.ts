@@ -42,4 +42,22 @@ export class CvService {
   async updateCV2(critere, updatecv: UpdateCvDto) {
     return await this.cvRepository.update(critere, updatecv);
   }
+
+  // suppresssion I du cv
+  async removeCv(id: string) {
+    const cvRemove = await this.cvRepository.findOneBy({
+      id: id,
+    });
+    if (!cvRemove) {
+      throw new NotFoundException(
+        `Le cv correspondant a cet id: ${id} n'existe pas `,
+      );
+    }
+    return await this.cvRepository.remove(cvRemove);
+  }
+
+  // suppresssion II du cv
+  async deleteCv(id: string) {
+    return await this.cvRepository.delete(id);
+  }
 }
