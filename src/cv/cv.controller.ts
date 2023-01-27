@@ -16,7 +16,11 @@ import { identity } from 'rxjs';
 @Controller('cv')
 export class CvController {
   constructor(private cvServices: CvService) {}
-
+  // statistiques
+  @Get('states')
+  async state() {
+    return await this.cvServices.StatisticCvAge();
+  }
   //function read data
   @Get('all')
   async getAllCv(): Promise<CvEntity[]> {
