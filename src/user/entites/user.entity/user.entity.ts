@@ -8,12 +8,21 @@ import {
 } from 'typeorm';
 import { TimeStamps } from '../../../Times/timestamp.entity';
 import { CvEntity } from '../../../cv/entities/cv.entity/cv.entity';
+import { rolesUser } from '../../../user-role-enum/userRoles';
 
 @Entity('user')
 export class UserEntity extends TimeStamps {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({
+    type: 'enum',
+    enum: rolesUser,
+    default: rolesUser.USER,
+  })
+  role: string;
+
+  salt: string;
   @Column({
     length: 55,
     unique: true,
@@ -32,6 +41,10 @@ export class UserEntity extends TimeStamps {
   })
   password: string;
 
-  @OneToMany((type) => CvEntity, (cv) => cv.user)
+  @OneToMany((type) => CvEntity, (cv) => cv.user, {
+    cascade: true,
+    nullable: true,
+    eager: true,
+  })
   cvs: CvEntity[];
 }

@@ -29,6 +29,9 @@ export class CvEntity extends TimeStamps {
   @Column()
   path: string;
 
-  @ManyToOne((type) => UserEntity, (user) => user.cvs)
+  @ManyToOne((type) => UserEntity, (user) => user.cvs, {
+    cascade: ['insert', 'update'],
+    nullable: true,
+  })
   user: UserEntity;
 }
