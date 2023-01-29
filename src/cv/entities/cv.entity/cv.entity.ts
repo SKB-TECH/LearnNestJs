@@ -1,5 +1,7 @@
+import { UserEntity } from 'src/user/entites/user.entity/user.entity';
 import { TimeStamps } from '../../../Times/timestamp.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { type, userInfo } from 'os';
 @Entity('cv')
 export class CvEntity extends TimeStamps {
   @PrimaryGeneratedColumn('uuid')
@@ -26,4 +28,7 @@ export class CvEntity extends TimeStamps {
 
   @Column()
   path: string;
+
+  @ManyToOne((type) => UserEntity, (user) => user.cvs)
+  user: UserEntity;
 }

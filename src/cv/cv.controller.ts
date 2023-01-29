@@ -19,7 +19,7 @@ export class CvController {
   // statistiques
   @Get('states')
   async state() {
-    return await this.cvServices.StatisticCvAge();
+    return await this.cvServices.StatisticCvAge(60, 15);
   }
   //function read data
   @Get('all')

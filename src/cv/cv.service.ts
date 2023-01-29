@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, mixin } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CvEntity } from './entities/cv.entity/cv.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -80,9 +80,13 @@ export class CvService {
   }
 
   /** une requette build permete de creer des requettes personnaliser qui ne figurent pas dans typeORM */
-  async StatisticCvAge() {
+  async StatisticCvAge(maxAge = 0, minAge = 0) {
     const qb = this.cvRepository.createQueryBuilder('cv');
-    qb.select('cv.age, count(cv.id) as stateCV').groupBy('cv.age');
+    qb.select('cv.age, count(cv.id) as stateCV')
+      .where('cv.age >  :minAge and cv.age <  :maxAge')
+      .setParameters({ maxAge, minAge })
+      .groupBy('cv.age');
+    console.log(qb.getSql());
     return await qb.getRawMany();
   }
 }
