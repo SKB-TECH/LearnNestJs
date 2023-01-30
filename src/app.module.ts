@@ -20,6 +20,7 @@ import {
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CvModule } from './cv/cv.module';
+import { UserModule } from './user/user.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -40,6 +41,7 @@ dotenv.config();
       synchronize: true,
     }),
     CvModule,
+    UserModule,
   ],
   controllers: [AppController, TodoController],
   providers: [AppService, TodoService],
