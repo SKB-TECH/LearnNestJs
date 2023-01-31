@@ -6,12 +6,14 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CvService } from './cv.service';
 import { CvEntity } from './entities/cv.entity/cv.entity';
 import { AddCvDto } from './dto/addCvDto';
 import { UpdateCvDto } from './dto/updateCvDto';
 import { identity } from 'rxjs';
+import { JwtAuthGuard } from '../user/Guards/jwt-auth.guard';
 
 @Controller('cv')
 export class CvController {
@@ -22,6 +24,8 @@ export class CvController {
     return await this.cvServices.StatisticCvAge(60, 15);
   }
   //function read data
+  // condition pour passer
+  @UseGuards(JwtAuthGuard)
   @Get('all')
   async getAllCv(): Promise<CvEntity[]> {
     return await this.cvServices.getCvs();
