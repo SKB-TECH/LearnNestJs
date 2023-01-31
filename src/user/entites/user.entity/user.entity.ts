@@ -27,7 +27,7 @@ export class UserEntity extends TimeStamps {
     length: 55,
     unique: true,
   })
-  name: string;
+  username: string;
 
   @Column({
     length: 70,
@@ -37,7 +37,6 @@ export class UserEntity extends TimeStamps {
 
   @Column({
     unique: true,
-    length: 12,
   })
   password: string;
 
