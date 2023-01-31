@@ -10,12 +10,14 @@ import { Repository } from 'typeorm';
 import * as bycript from 'bcrypt';
 import { CredentialDto } from './dto/creadentialDto';
 import { throwError } from 'rxjs';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+    private JwtService: JwtService,
   ) {}
   async register(userData: subscribeDTO): Promise<Partial<UserEntity>> {
     const user = await this.userRepository.create({
@@ -40,7 +42,8 @@ export class UserService {
     };
   }
 
-  async login(credential: CredentialDto): Promise<Partial<UserEntity>> {
+  // fonction pour se connecter
+  async login(credential: CredentialDto) {
     const { email, password } = credential;
     const user = await this.userRepository
       .createQueryBuilder('user')
@@ -51,13 +54,16 @@ export class UserService {
     if (!user) {
       throw new NotFoundException('email or password is not correct !!!');
     }
-    console.log(user);
     const isMatch = await bycript.compare(password, (await user).password);
     if (isMatch) {
+      const payload = {
+        username: user.username,
+        email: user.email,
+        password: user.password,
+      };
+      const jwt = await this.JwtService.sign(payload);
       return {
-        username: (await user).username,
-        email: (await user).email,
-        role: (await user).role,
+        access_token: jwt,
       };
     } else {
       throw new NotFoundException('email or password is not correct !!!');
