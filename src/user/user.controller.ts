@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { UserEntity } from 'src/user/entites/user.entity/user.entity';
 import { subscribeDTO } from './dto/subscribeDTO';
 import { CredentialDto } from './dto/creadentialDto';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('user')
 export class UserController {
@@ -14,9 +15,7 @@ export class UserController {
   }
 
   @Post('login')
-  async login(
-    @Body() credentialDto: CredentialDto,
-  ): Promise<Partial<UserEntity>> {
+  async login(@Body() credentialDto: CredentialDto) {
     return await this.UserService.login(credentialDto);
   }
 }
