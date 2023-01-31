@@ -6,6 +6,7 @@ import { UserEntity } from 'src/user/entites/user.entity/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
+import { JwtStrategy } from './strategies/strategie';
 
 dotenv.config();
 @Module({
@@ -23,6 +24,6 @@ dotenv.config();
     }),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService, JwtStrategy],
 })
 export class UserModule {}
